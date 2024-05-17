@@ -1,4 +1,4 @@
-package com.gomtak.batch
+package com.gomtak.batch.job
 
 import org.springframework.batch.core.*
 import org.springframework.batch.core.job.SimpleJob
@@ -14,20 +14,17 @@ import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
 class HelloWorldConfig {
+
     @Bean
-    fun jobExecution(jobLauncher: JobLauncher, simpleJob: Job): JobExecution {
-        return jobLauncher.run(simpleJob, JobParameters())
-    }
-    @Bean
-    fun simpleJob(jobRepository: JobRepository, simpleStep: Step): Job {
-        val simpleJob = SimpleJob("simpleJob")
-        simpleJob.addStep(simpleStep)
+    fun helloJob(jobRepository: JobRepository, helloStep: Step): Job {
+        val simpleJob = SimpleJob("helloJob")
+        simpleJob.addStep(helloStep)
         simpleJob.setJobRepository(jobRepository)
         return simpleJob
     }
 
     @Bean
-    fun simpleStep1(jobRepository: JobRepository, transactionManager: PlatformTransactionManager): Step {
+    fun helloStep(jobRepository: JobRepository, transactionManager: PlatformTransactionManager): Step {
         val simpleStep1 = TaskletStep("simpleStep1")
         simpleStep1.setJobRepository(jobRepository)
         simpleStep1.setTransactionManager(transactionManager)
