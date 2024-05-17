@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sample?serverTimeZone=Asia/Seoul&characterEncoding=UTF-8
+    username: admin
+    password: admin
+---
+#spring:
+#  flyway:
+#    enabled: true
+---
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+---
