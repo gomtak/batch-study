@@ -8,3 +8,5 @@
  ### Branch
  - [x] simple job
  - [x] multiple job
+ - [x] jpaItemReader, jpaItemWriter
+ - [x] job parameter 
