@@ -11,7 +11,10 @@ import lombok.Getter
 class Person {
     fun aging() {
         println("Aging person: $name")
-        age = age?.plus(1)
+        if (age == null) {
+            throw IllegalStateException("Age is null");
+        }
+        age = age!!.plus(1)
     }
 
     @Id

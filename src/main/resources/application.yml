@@ -19,8 +19,8 @@ spring:
 #  level:
 #    org.hibernate:.orm.jdbc.bind: trace
 ---
-spring:
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:sql/*.sql
+#spring:
+#  sql:
+#    init:
+#      mode: always
+#      schema-locations: classpath:sql/*.sql
