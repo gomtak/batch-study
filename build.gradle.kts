@@ -35,6 +35,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.batch:spring-batch-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7")
 }
 
 tasks.withType<KotlinCompile> {
