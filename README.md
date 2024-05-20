@@ -5,8 +5,10 @@
 * 잡이 두개 이상일시 아래 설정이 필요함.
 ````yml
 spring:
- batch:
-  job:
+batch:
+   job:
    name: ${job.name:job}
 ````
 * program arguments: --job.name=jobName 로 진행
+  * --job.name=helloJob
+  * --job.name=readerJob

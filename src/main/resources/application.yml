@@ -19,3 +19,9 @@ spring:
   batch:
     job:
       name: ${job.name:job}
+---
+spring:
+  sql:
+    init:
+      schema-locations: classpath:sql/*.sql
+      mode: always
