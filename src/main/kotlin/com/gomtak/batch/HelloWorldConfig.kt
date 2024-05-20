@@ -17,7 +17,7 @@ class HelloWorldConfig {
 
     @Bean
     fun simpleJob(jobRepository: JobRepository, simpleStep: Step): Job {
-        val simpleJob = SimpleJob("simpleJob")
+        val simpleJob = SimpleJob()
         simpleJob.addStep(simpleStep)
         simpleJob.setJobRepository(jobRepository)
         return simpleJob
@@ -25,7 +25,7 @@ class HelloWorldConfig {
 
     @Bean
     fun simpleStep1(jobRepository: JobRepository, transactionManager: PlatformTransactionManager): Step {
-        val simpleStep1 = TaskletStep("simpleStep1")
+        val simpleStep1 = TaskletStep()
         simpleStep1.setJobRepository(jobRepository)
         simpleStep1.setTransactionManager(transactionManager)
         simpleStep1.tasklet = Tasklet { contribution: StepContribution?, chunkContext: ChunkContext? ->
