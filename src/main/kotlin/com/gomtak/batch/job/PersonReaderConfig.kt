@@ -21,12 +21,6 @@ import java.time.LocalDateTime
 
 @Configuration
 class PersonReaderConfig {
-
-    @Bean
-    fun jobExecution(jobLauncher: JobLauncher,
-                     simpleJob: Job): JobExecution {
-        return jobLauncher.run(simpleJob, JobParameters())
-    }
     @Bean
     fun simpleJob(jobRepository: JobRepository, simpleStep: Step): Job {
         val simpleJob = SimpleJob()

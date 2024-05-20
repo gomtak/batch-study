@@ -4,6 +4,8 @@
  * sql 하위 폴더에 sql 파일 실행
    * /org/springframework/batch/core/schema-**.sql 존재
  * JpaItemReader, JpaItemWriter 사용
+ * Program argument
+   * ex) dateTime=2024-05-20T13:00:00
 ---
  ### Branch
  - [x] simple job
