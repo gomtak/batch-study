@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.batch.core.*
 import org.springframework.batch.core.job.SimpleJob
 import org.springframework.batch.core.repository.JobRepository
+import org.springframework.batch.core.scope.context.ChunkContext
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.item.ItemReader
@@ -32,15 +34,33 @@ class ExposedBatchConfig {
 
     @Bean
     fun simpleStep(
-        customItemReader: CustomItemReader,
+        test: Tasklet,
         jobRepository: JobRepository,
         transactionManager: PlatformTransactionManager
     ): Step {
         return StepBuilder("_", jobRepository)
-            .chunk<User, User>(10, transactionManager)
-            .reader(customItemReader)
-            .processor { it.aging() }
-            .writer { items -> items.forEach { println(it.name) } }
+            .tasklet(test, transactionManager)
             .build()
+    }
+
+    @Bean
+    fun test(dataSource: DataSource): Tasklet {
+        return Tasklet { contribution: StepContribution, chunkContext: ChunkContext ->
+            Database.connect(dataSource)
+            transaction {
+                SchemaUtils.create(Users)
+                Users.insert {
+                    it[name] = "Alice"
+                    it[age] = 20
+                    it[city] = 1L
+                }
+                Users.insert {
+                    it[name] = "Bob"
+                    it[age] = 30
+                    it[city] = 2L
+                }
+            }
+            RepeatStatus.FINISHED
+        }
     }
 }
