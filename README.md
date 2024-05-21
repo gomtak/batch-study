@@ -12,3 +12,4 @@
  - [x] multiple job
  - [x] jpaItemReader, jpaItemWriter
  - [x] job parameter 
+ - [x] exposed 로 배치 실행.
