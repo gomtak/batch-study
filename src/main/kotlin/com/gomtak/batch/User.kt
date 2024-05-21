@@ -1,12 +1,14 @@
 package com.gomtak.batch
 
 import com.gomtak.batch.User.Companion.optionalReferrersOn
+import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 
 object Users : LongIdTable("user") {
     val name: Column<String> = varchar("name", 50)
@@ -18,16 +20,14 @@ object Cities: LongIdTable("city") {
 }
 
 class User(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<User>(Users)
+    var name by Users.name
+    var city by City optionalReferencedOn Users.city
+    var age by Users.age
     fun aging(): User {
         age++
         return this
     }
-
-    companion object : LongEntityClass<User>(Users)
-
-    var name by Users.name
-    var city by City optionalReferencedOn Users.city
-    var age by Users.age
 }
 
 class City(id: EntityID<Long>) : LongEntity(id) {

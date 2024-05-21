@@ -25,3 +25,7 @@ spring:
 spring:
   exposed:
     show-sql: true
+---
+logging:
+  level:
+    Exposed: debug

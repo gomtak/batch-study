@@ -2,10 +2,18 @@ package com.gomtak.batch
 
 import com.gomtak.batch.Users.age
 import com.gomtak.batch.Users.city
+import com.gomtak.batch.Users.id
+import com.gomtak.batch.Users.name
 import lombok.RequiredArgsConstructor
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
+import org.jetbrains.exposed.sql.statements.BatchInsertStatement
+import org.jetbrains.exposed.sql.statements.BatchReplaceStatement
+import org.jetbrains.exposed.sql.statements.BatchUpdateStatement
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.batch.core.*
 import org.springframework.batch.core.job.SimpleJob
@@ -48,17 +56,23 @@ class ExposedBatchConfig {
         return Tasklet { contribution: StepContribution, chunkContext: ChunkContext ->
             Database.connect(dataSource)
             transaction {
-                SchemaUtils.create(Users)
-                Users.insert {
-                    it[name] = "Alice"
-                    it[age] = 20
-                    it[city] = 1L
+//                addLogger(StdOutSqlLogger)  logging.level.Exposed: debug 으로 Show SQL logging 확인
+//                SchemaUtils.create(Cities, Users) generate-ddl: true 으로 스키마 생성
+
+                val toList = Users.selectAll() .where{ age lessEq  50 }.toList()
+//                Users.batchInsert(toList, ignore = false, false) {
+//                    this[Users.name] = it[name]
+//                    this[Users.city] = it[city]
+//                    this[Users.age] = it[age] + 50
+//                }
+
+                Users.batchReplace(toList, false) {
+                    this[Users.id] = it[Users.id]
+                    this[Users.name] = it[name]
+                    this[Users.age] = it[age] + 50
                 }
-                Users.insert {
-                    it[name] = "Bob"
-                    it[age] = 30
-                    it[city] = 2L
-                }
+
+
             }
             RepeatStatus.FINISHED
         }
