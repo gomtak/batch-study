@@ -54,25 +54,14 @@ class ExposedBatchConfig {
     @Bean
     fun test(dataSource: DataSource): Tasklet {
         return Tasklet { contribution: StepContribution, chunkContext: ChunkContext ->
-            Database.connect(dataSource)
-            transaction {
 //                addLogger(StdOutSqlLogger)  logging.level.Exposed: debug 으로 Show SQL logging 확인
 //                SchemaUtils.create(Cities, Users) generate-ddl: true 으로 스키마 생성
 
-                val toList = Users.selectAll() .where{ age lessEq  50 }.toList()
-//                Users.batchInsert(toList, ignore = false, false) {
-//                    this[Users.name] = it[name]
-//                    this[Users.city] = it[city]
-//                    this[Users.age] = it[age] + 50
-//                }
-
-                Users.batchReplace(toList, false) {
-                    this[Users.id] = it[Users.id]
-                    this[Users.name] = it[name]
-                    this[Users.age] = it[age] + 50
-                }
-
-
+            val toList = Users.selectAll().where { age lessEq 50 }.toList()
+            Users.batchReplace(toList, false) {
+                this[Users.id] = it[Users.id]
+                this[name] = it[name]
+                this[age] = it[age] + 50
             }
             RepeatStatus.FINISHED
         }
